@@ -4,25 +4,28 @@ const uint8_t MPU_addr=0x68; // I2C address of the MPU-6050
  
 MPU6050 testUnit(MPU_addr);
  
-const byte interruptPin = D7;
-const uint8_t threshold = 20;
-const uint8_t duration = 10;
+const uint8_t threshold = 3;
+const uint8_t duration = 40;
 
 void setupMotionInt(void);
  
 void setup() {
 Wire.begin();
 Serial.begin(115200);
+testUnit.setIntMotionEnabled(false);  //stop  subsequent resets
+
 Serial.println("I'm Awake!");
 Serial.print("Motion detect Status : "); Serial.println(testUnit.getMotionStatus(),BIN);
+
+Serial.println("Going to sleep...");
+delay(1000);
+Serial.println("3...");
+delay(1000);
+Serial.println("2...");
+delay(1000);
+Serial.println("1...");
+
 setupMotionInt();
- 
-testUnit.setInterruptLatch(0);
-testUnit.setInterruptLatchClear(0);
-testUnit.setInterruptDrive(0);
-testUnit.setInterruptMode(1);
- 
-Serial.println("Going to sleep. . .");
 ESP.deepSleep(0);
 }
  
@@ -72,5 +75,9 @@ testUnit.setStandbyZGyroEnabled(true);
  
 // Enable cycle mode
 testUnit.setWakeCycleEnabled(true);
- 
+
+testUnit.setInterruptLatch(0);  //0 = 50us-pulse, 1 = latch-until-int-cleared
+testUnit.setInterruptLatchClear(0); //0 = status-read-only, 1 = any-register-read
+testUnit.setInterruptDrive(0);  //0 = pull-pull, 1 = open-drain
+testUnit.setInterruptMode(0); //0 = active-high, 1 = active-low
 }

@@ -6,7 +6,7 @@ MPU6050 testUnit(MPU_addr);
  
 void setup() {
 uint8_t threshold = 1;
-uint8_t duration = 1;
+uint8_t duration = 40;
  
 Wire.begin();
 Serial.begin(115200);
@@ -29,5 +29,5 @@ Serial.print("Enabled : ");Serial.println(testUnit.getIntMotionEnabled());
 void loop() {
  
 Serial.print("Motion detect Status : "); Serial.println(testUnit.getMotionStatus(),BIN);
-delay(500); // Wait 5 seconds and scan again
+delay(100); // Wait 5 seconds and scan again
 }
